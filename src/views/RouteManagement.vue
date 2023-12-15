@@ -1,43 +1,31 @@
 <template>
-  <div>
-  <h1>Routes Management Pannel</h1>
-  <div class="container">
-          <table>
-          <tr>
-            <th>From</th>
-            <th>To</th>
-            <th>Cost</th>
-            <th>Time</th>
-            <th>Date</th>
-          </tr>
-          <tr class="item" v-for="route in routes" :key="route.id">
-            <td><input name="fromcity" type="text" id="fromcity" required v-model="route.fromcity"></td>
-            <td><input name="tocity" type="text" id="tocity" required v-model="route.tocity"></td>
-            <td><input name="cost" type="text" id="cost" required v-model="route.cost"></td>
-            <td><input name="time" type="text" id="time" required v-model="route.departuretime"></td>
-            <td><input name="date" type="text" id="date" required v-model="route.departuredate"></td>
-            <td><button class="update"  @click="updateRoute(route.id, route)">update</button> </td> 
-            <td><button class="delete"  @click="deleteRoute(route.id)">delete</button> </td> 
-          </tr>
-          </table>
-    </div>
-    
-    <h3>Add a Route</h3>
-    <div class="container">
-            <td><input name="fromcity" type="text" id="fromcityAdd" placeholder="From" required v-model="ARoute.fromcity"></td>
-            <td><input name="tocity" type="text" id="tocityAdd" placeholder="To" required v-model="ARoute.tocity"></td>
-            <td><input name="cost" type="number" id="costAdd" placeholder="Cost" required v-model="ARoute.cost"></td>
-            <td><input name="time" type="text" id="timeAdd" placeholder="Departure time" required v-model="ARoute.departuretime"></td>
-            <td><input name="date" type="text" id="dateAdd"   required v-model="ARoute.departuredate"></td>
-    </div>
-    <button class="add"  @click="addRoute(ARoute)"> Add  </button>
-  </div>
+  <h3>All routes</h3>
+  <table>
+    <tr>
+      <th>From</th>
+      <th>To</th>
+      <th>Cost</th>
+      <th>Time</th>
+      <th>Date</th>
+    </tr>
+    <tr v-for="route in routes" :key="route.id">
+      <td>{{route.fromcity}}</td>
+      <td>{{route.tocity}}</td>
+      <td>{{route.cost}}</td>
+      <td>{{route.departuretime}}</td>
+      <td>{{route.departuredate}}</td>
+      <button @click="updateRoute" class="updateRoute">Update Route</button>
+      <button @click="deleteRoute(route.id)" class="deleteRoute">Delete Route</button>
+    </tr>
+  </table>
 </template>
 
-
 <script>
+import router from '@/router';
+
+
 export default {
-  name: "RoutesManagement",
+  name: "AllRoutes",
   data() {
     return {
       ARoute: {
@@ -51,100 +39,82 @@ export default {
     };
   },
   methods: {
-    fetchRouts() {
+    fetchRoutes() {
       fetch(`http://localhost:3000/api/routes/`)
         .then((response) => response.json())
         .then((data) => (this.routes = data))
         .catch((err) => console.log(err.message));
-  },
-    addRoute(route) {
-      fetch(`http://localhost:3000/api/routes`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(route),
-        })
-        .then((response) => {
-          //console.log("response.data" + response.data);
-          this.$router.push("/");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
     },
-    updateRoute(id, route) {
-      fetch(`http://localhost:3000/api/routes/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify( {"id": id, "fromcity": route.fromcity, "tocity": route.tocity, "cost": route.cost, "departuretime": route.departuretime, "departuredate": route.departuredate}),
-            })
-        .then((response) => {
-          //console.log("response.data" + response.data);
-          this.$router.push("/");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    deleteRoute(id) {
-      fetch(`http://localhost:3000/api/routes/${id}`, {
+    deleteRoute(routeId) {
+      fetch(`http://localhost:3000/api/routes/${routeId}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
       })
-        .then((response) => {
-          //console.log(response.data);
-          this.$router.push("/routemanagement'");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    }, 
+      .then((response) => {
+        console.log(response.data);
+        this.fetchRoutes();
+        this.$router.push("/api/allroutes");
+      
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    },
   },
   mounted() {
-    this.fetchRouts();
+    this.fetchRoutes();
     console.log("mounted");
-  } 
+  },
 };
 </script>
 
-<style scoped>
-h1 {
-  font-size: 20px;
-}
-.container {
-  background: #d5d7d8;
-  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
-  margin-bottom: 30px;
-  margin-top: 30px;
-  padding: 10px 20px;
-  margin: auto;
-  width: 80%;
-  border-radius: 20px;
-  display: flex;
-  justify-content: center;
-  
-}
-input{
-  width: 100px;
-  text-align: center
-}
-.delete{
-    background: red;
-}
-.update{
-    background: blue;
-}
-.add{
-  background: rgb(8, 110, 110);
-  border: 0;
-  padding: 10px 20px;
-  margin-top: 20px;
-  color: white;
-  border-radius: 20px;
+<style>
+table{
+  margin-left: 400px;
   align-items: center;
-  text-align: center;
+  background-color: lightgray;
+  padding: 20px;
+  border-radius: 20px;
 }
+th {
+  text-align: center;
+  margin: 30px;
+}
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  background-color: white;
+
+}
+tr{
+  width: 300px;
+  margin: 50px;
+  padding: 30px;
+}
+
+.blue {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  background-color: rgb(144, 144, 238);
+}
+.red {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  background-color: rgb(238, 144, 144);
+}
+p{
+  background-color: gray;
+  padding: 50px;
+  width: 260px;
+  margin-left: 400px;
+}
+.deleteRoute{
+  background-color: red;
+}
+.updateRoute{
+  background-color: blue;
+  color: white;
+}
+
 </style>

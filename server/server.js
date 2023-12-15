@@ -50,33 +50,18 @@ app.post('/api/routes', async(req, res) => {
     }
 });
 
-app.put('/api/routes/:id', async(req, res) => {
-    try {
-        const { id } = req.params;
-        const route = req.body;
-        console.log("An update request has arrived");
-        const updateroute = await pool.query(
-            "UPDATE routes SET (id, fromcity, tocity, cost, departuretime, departuredate) = ($1, $2, $3, $4, $5, $6) WHERE id = $1 RETURNING*", [id, route.fromcity, route.tocity, route.cost, route.departuretime, route.departuredate]
-        );
-        res.json(updateroute);
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-
 app.delete('/api/routes/:id', async(req, res) => {
     try {
         const { id } = req.params;
-        console.log(" A delete  request has arrived");
-        const deletepost = await pool.query(
+        console.log("delete a route request has arrived");
+        const deleteroute = await pool.query(
             "DELETE FROM routes WHERE id = $1 RETURNING*", [id]
         );
-        res.json(deletepost);
+        res.json(deleteroute);
     } catch (err) {
         console.error(err.message);
     }
 });
-
 
 app.listen(port, () => {
     console.log("Server is listening to port " + port)

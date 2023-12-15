@@ -56,6 +56,7 @@ export default {
 </script>
 
 <style>
+/*
 table{
   margin-left: 400px;
   word-spacing: 20px;
@@ -95,6 +96,6 @@ p{
   padding: 50px;
   width: 260px;
   margin-left: 400px;
-}
+}*/
 
 </style>
