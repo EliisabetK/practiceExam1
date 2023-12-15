@@ -1,99 +1,100 @@
 <template>
+  <h3>All routes</h3>
+  <table>
+    <tr>
+      <th>From</th>
+      <th>To</th>
+      <th>Cost</th>
+      <th>Time</th>
+      <th>Date</th>
+    </tr>
+    <tr v-for="route in routes" :key="route.id">
+      <td>{{route.fromcity}}</td>
+      <td>{{route.tocity}}</td>
+      <td :class="getColorClass(route.cost)">{{route.cost}}</td>
+      <td>{{route.departuretime}}</td>
+      <td>{{route.departuredate}}</td>
+    </tr>
+  </table>
   <div>
-<h3> All Route  </h3>
-
-<!-- Task 1 -->
-    <div class="container">
-          <table>
-          <tr>
-            <th>From</th>
-            <th>To</th>
-            <th>Cost</th>
-            <th>Time</th>
-            <th>Date</th>
-          </tr>
-          <tr class="item" v-for="route in routes" :key="route.id">
-            <td>{{ route.fromcity }} </td>
-            <td>{{ route.tocity}} </td>
-            <!-- <td> {{ route.cost}}</td> -->
-
-            <td class='red' v-if="route.cost > 12"> {{ route.cost}}</td>
-            <td class='blue' v-else>{{ route.cost}}</td>
-
-            <td>{{ route.departuretime }} </td>
-            <td>{{ route.departuredate }} </td> 
-          </tr>
-          </table>
-    </div>
-    <div class ='counters'  >
-            <p> We have  {{ routes.length }} trips today! </p>
-    </div>
+    <p>We have {{ routes.length }} trips today</p>
   </div>
 </template>
 
-
 <script>
+
 export default {
   name: "AllRoutes",
   data() {
     return {
-      toTallinn: 0,
+      ARoute: {
+        fromcity: "",
+        tocity: "",
+        cost: "",
+        departuretime: "",
+        departuredate: "",
+      },
       routes: [],
-
     };
   },
   methods: {
-    fetchRouts() {
+    fetchRoutes() {
       fetch(`http://localhost:3000/api/routes/`)
         .then((response) => response.json())
         .then((data) => (this.routes = data))
         .catch((err) => console.log(err.message));
-   },
+    },
+    getColorClass(cost) {
+      return cost > 12 ? 'red' : 'blue';
+    }
   },
   mounted() {
-    this.fetchRouts();
+    this.fetchRoutes();
     console.log("mounted");
-  } 
+  },
 };
 </script>
 
-<style scoped>
-h1 {
-  font-size: 20px;
+<style>
+table{
+  margin-left: 400px;
+  word-spacing: 20px;
+  align-items: center;
+  background-color: lightgray;
 }
 th {
-  background: rgb(100, 151, 122);
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  background-color: green;
 }
 td {
-  background: rgb(186, 228, 204);
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  background-color: lightgreen;
 }
-th, td {
-  font-size: 15px;
-  margin-bottom: 5px;
-  padding: 8px 10px;
+tr{
+  width: 300px;
 }
-.red{
-   background: rgb(225, 33, 19); 
+
+.blue {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  background-color: rgb(144, 144, 238);
 }
-.blue{
-   background: rgb(19, 67, 163); 
+.red {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  background-color: rgb(238, 144, 144);
 }
-.counters{
-    background: rgb(157, 160, 165); 
-    padding: 10px 20px;
-    display: block;
-    width: 40%;
-    margin: auto;
-    font-size: 18px;
+p{
+  background-color: gray;
+  padding: 50px;
+  width: 260px;
+  margin-left: 400px;
 }
-.container {
-  background: #d5d7d8;
-  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
-  margin-bottom: 30px;
-  padding: 10px 20px;
-  margin: auto;
-  width: 40%;
-  display: flex;
-  justify-content: center;
-}
+
 </style>
