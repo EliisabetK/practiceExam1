@@ -30,7 +30,7 @@
         <input type="text" id="departuretime" name="Departuretime" placeholder="Departure time" required v-model="ARoute.departuretime">
         <input type="text" id="dateAdd" name="dateAdd" placeholder="Departure date" required v-model="ARoute.departuredate">
       </form>
-      <button @click="addRoute()" class="addRoute">Add Route</button>
+      <button @click="addRoute(ARoute)" class="addRoute">Add Route</button>
       <button @click="deleteAll()" class="deleteAll">Delete all</button>
     </formcontainer>
   </div>
@@ -85,20 +85,14 @@ export default {
       .catch((e) => console.log(e));
     },
 
-  addRoute() {
-  var data = {
-    fromcity: this.ARoute.fromcity,
-    tocity: this.ARoute.tocity,
-    cost: this.ARoute.cost,
-    departuretime: this.ARoute.departuretime,
-    departuredate: this.ARoute.departuredate,
-  };
+  addRoute(route) {
+
   fetch("http://localhost:3000/api/routes", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(route),
   })
   .then((response) => {
     console.log(response.data);
