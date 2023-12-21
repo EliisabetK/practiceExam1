@@ -23,6 +23,17 @@ app.get('/api/routes', async(req, res) => {
         console.error(err.message);
     }
 });
+app.get('/api/busses', async(req, res) => {
+    try {
+        console.log("A get all request has arrived");
+        const busses = await pool.query(
+            "SELECT * FROM busses ORDER BY id"
+        );
+        res.json(busses.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
 
 app.get('/api/routes/:fromcity/:tocity/:departuretime/:departuredate', async (req, res) => {
     try {

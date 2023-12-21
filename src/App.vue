@@ -7,11 +7,9 @@
       <router-link to="/allbusses"> |  Buss Information</router-link> 
       <router-link to="/tickets"> |  Tickets</router-link> 
       <router-link to="/findroute"> |  Find a route</router-link> 
-
+      <router-link to="/design"> |  Design page</router-link> 
     </nav>
     <router-view />
-  
-   
   </div>
 </template>
 

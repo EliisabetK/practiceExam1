@@ -4,6 +4,7 @@ import AllRouts from "../views/AllRoutes.vue";
 import BussInformation from "../views/BussInformation.vue";
 import Tickets from "../views/Tickets.vue"
 import FindRoute from "../views/FindRoute.vue"
+import Design from "../views/Design.vue";
 
 const routes = [{
         path: "/",
@@ -19,6 +20,7 @@ const routes = [{
         name: 'Findroute',
         component: FindRoute,
     },
+    {path: '/design', name: 'Design', component: Design},
     {
         path: "/allbusses",
         name: "allBusses",
