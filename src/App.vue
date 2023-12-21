@@ -4,6 +4,10 @@
     <nav>
       <router-link to="/">Routs</router-link> |
       <router-link to="/routemanagement"> Routes Management</router-link> 
+      <router-link to="/allbusses"> |  Buss Information</router-link> 
+      <router-link to="/tickets"> |  Tickets</router-link> 
+      <router-link to="/findroute"> |  Find a route</router-link> 
+
     </nav>
     <router-view />
   

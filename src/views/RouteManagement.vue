@@ -1,23 +1,39 @@
 <template>
-  <h3>All routes</h3>
-  <table>
-    <tr>
-      <th>From</th>
-      <th>To</th>
-      <th>Cost</th>
-      <th>Time</th>
-      <th>Date</th>
-    </tr>
-    <tr v-for="route in routes" :key="route.id">
-      <td>{{route.fromcity}}</td>
-      <td>{{route.tocity}}</td>
-      <td>{{route.cost}}</td>
-      <td>{{route.departuretime}}</td>
-      <td>{{route.departuredate}}</td>
-      <button @click="updateRoute" class="updateRoute">Update Route</button>
-      <button @click="deleteRoute(route.id)" class="deleteRoute">Delete Route</button>
-    </tr>
-  </table>
+  <div>
+    <h2>Routes Management Pannel</h2>
+    <table>
+      <tr>
+        <th>From</th>
+        <th>To</th>
+        <th>Cost</th>
+        <th>Time</th>
+        <th>Date</th>
+      </tr>
+      <tr v-for="route in routes" :key="route.id">
+        <td><input type="text" v-model="route.fromcity" /></td>
+        <td><input type="text" v-model="route.tocity" /></td>
+        <td><input type="text" v-model="route.cost" /></td>
+        <td><input type="text" v-model="route.departuretime" /></td>
+        <td><input type="text" v-model="route.departuredate" /></td>
+        <buttoncontainer>
+          <button @click="updateRoute(route)" class="updateRoute">Update Route</button>
+          <button @click="deleteRoute(route.id)" class="deleteRoute">Delete Route</button>
+        </buttoncontainer>
+        
+      </tr>
+    </table>
+    <formcontainer>
+      <form>
+        <input type="text" id="from" name="From" placeholder="From" required v-model="ARoute.fromcity">
+        <input type="text" id="to" name="To" placeholder="To" required v-model="ARoute.tocity">
+        <input type="text" id="cost" name="Cost" placeholder="Cost" required v-model="ARoute.cost">
+        <input type="text" id="departuretime" name="Departuretime" placeholder="Departure time" required v-model="ARoute.departuretime">
+        <input type="text" id="dateAdd" name="dateAdd" placeholder="Departure date" required v-model="ARoute.departuredate">
+      </form>
+      <button @click="addRoute()" class="addRoute">Add Route</button>
+      <button @click="deleteAll()" class="deleteAll">Delete all</button>
+    </formcontainer>
+  </div>
 </template>
 
 <script>
@@ -49,6 +65,54 @@ export default {
       fetch(`http://localhost:3000/api/routes/${routeId}`, {
         method: "DELETE",
       })
+      .then(() => this.fetchRoutes())
+      .catch((e) => console.log(e));
+    },
+
+    updateRoute(route) {
+      fetch(`http://localhost:3000/api/routes/${route.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(route),
+      })
+      .then((response) => {
+        console.log(response.data);
+        this.$router.push("/api/allroutes");
+      })
+      
+      .catch((e) => console.log(e));
+    },
+
+  addRoute() {
+  var data = {
+    fromcity: this.ARoute.fromcity,
+    tocity: this.ARoute.tocity,
+    cost: this.ARoute.cost,
+    departuretime: this.ARoute.departuretime,
+    departuredate: this.ARoute.departuredate,
+  };
+  fetch("http://localhost:3000/api/routes", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+  .then((response) => {
+    console.log(response.data);
+    this.$router.push("/api/allroutes");
+  })
+  .catch((e) => {
+    console.log(e);
+    console.log("error");
+  });
+},
+deleteAll() {
+      fetch(`http://localhost:3000/api/routes`, {
+        method: "DELETE",
+      })
       .then((response) => {
         console.log(response.data);
         this.fetchRoutes();
@@ -59,7 +123,9 @@ export default {
         console.log(e);
       });
     },
-  },
+
+},
+
   mounted() {
     this.fetchRoutes();
     console.log("mounted");
@@ -67,26 +133,41 @@ export default {
 };
 </script>
 
-<style>
-table{
-  margin-left: 400px;
-  align-items: center;
-  background-color: lightgray;
+<style scoped>
+.buttoncontainer {
+  display: flex;
+  width: auto;
+}
+form{
   padding: 20px;
   border-radius: 20px;
+  background-color: lightgray;
+  margin-top: 1em;
+}
+
+table{
+  margin-left: 200px;
+  align-items: center;
+  background-color: rgb(190, 186, 186);
+  padding: 10px;
+  border-radius: 20px;
+  width: auto;
 }
 th {
   text-align: center;
   margin: 30px;
+  width: auto;
 }
 td {
-  border: 1px solid #dddddd;
   text-align: left;
+  padding: 0px;
+  margin: 0px;
+  width: 7em;
+  text-align: center;
   background-color: white;
-
 }
 tr{
-  width: 300px;
+  width: auto;
   margin: 50px;
   padding: 30px;
 }
@@ -111,10 +192,26 @@ p{
 }
 .deleteRoute{
   background-color: red;
+  width: auto;
+
 }
 .updateRoute{
   background-color: blue;
   color: white;
+  width: auto;
+}
+.addRoute{
+  background-color: rgb(29, 86, 33);
+  color: white;
+  margin-top: 2em;
+}
+td input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  padding: 0px; 
+  margin: 0; 
+  text-align: center;
 }
 
 </style>

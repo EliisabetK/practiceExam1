@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import RouteManagement from "../views/RouteManagement.vue";
 import AllRouts from "../views/AllRoutes.vue";
-
+import BussInformation from "../views/BussInformation.vue";
+import Tickets from "../views/Tickets.vue"
+import FindRoute from "../views/FindRoute.vue"
 
 const routes = [{
         path: "/",
@@ -11,6 +13,21 @@ const routes = [{
         path: '/routemanagement',
         name: 'RouteManagement',
         component: RouteManagement,
+    },
+    {
+        path: '/findroute',
+        name: 'Findroute',
+        component: FindRoute,
+    },
+    {
+        path: "/allbusses",
+        name: "allBusses",
+        component: BussInformation,
+    },
+    {
+        path: "/tickets",
+        name: "Tickets",
+        component: Tickets,
     },
     { //will route to AllPosts view if none of the previous routes apply
         path: "/:catchAll(.*)",
